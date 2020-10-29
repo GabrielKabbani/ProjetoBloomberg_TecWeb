@@ -11,7 +11,7 @@ var app = express();
 
 
 const cors = require('cors');
-// server.use(cors());
+app.use(cors());
 
 // view engine setup
 app.engine('html', require('ejs').renderFile)
