@@ -5,7 +5,7 @@ import {Redirect} from 'react-router-dom'
 export default class Usuarios extends Component{
     constructor(props){
         super(props)
-        this.state = {lista: [{nome: 'teste', senha: 'teste'}], usuario: {nome: ''}}
+        this.state = {lista: [{nome: 'teste', senha: 'teste', acoes: [{ticker: 'teste', preco: '1', qtd: '1'}]}], usuario: {nome: '', senha: '', acoes: [{ticker: '', preco: '', qtd: ''}]}}
         this.handleChange= this.handleChange.bind(this)
         this.cadastro = this.cadastro.bind(this)
         axios.get('http://localhost:3000/users').then(resp=> {
@@ -20,9 +20,19 @@ export default class Usuarios extends Component{
 
     render(){
         var usuarios = this.state.lista
+        console.log(usuarios)
         var liUsuarios = usuarios.map(usuario => {
+            
+            var liAcoes = usuario.acoes.map(acao => {
+                return (
+                    <li 
+                    key={acao.ticker}>{acao.ticker}
+                    </li> 
+                )
+            })
             return (
-                <li key={usuario.nome}>{usuario.nome}:{usuario.senha}</li>
+
+                <li key={usuario.nome}>{usuario.nome}:{usuario.senha}:<ul>{liAcoes}</ul></li>
                 
             )
         })
