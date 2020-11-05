@@ -39,6 +39,37 @@ router.post('/users/', function (req,res,next){
     res.end;
   })
 })
+
+/* GET ONE user data for login check. */
+router.post('/user/', function (req,res,next){
+  console.log("CHEGOU AQUI")
+  console.log("REQUEST BODY:", req.body)
+  var db = require('../db');
+  var User = db.Mongoose.model('usercollection', db.UserSchema, 'usercollection');
+  var user = req.body;
+  console.log(user)
+  User.find(user, function(err,doc){
+    console.log("DOC LENGTH: ",doc.length)
+    if (err) {
+      res.status(500).json({error:err.message});
+      res.end();
+      return;
+    }else if (doc.length === 0){
+      res.json({worked:false})
+      return;
+    }else{
+      res.json({worked: true});
+      res.end();
+    }
+    
+    
+    }
+  )
+
+  })
+    
+
+
 /* PUT ONE user stock/info */
 router.put('/users/:nome', function (req,res,next){
   var db = require('../db');

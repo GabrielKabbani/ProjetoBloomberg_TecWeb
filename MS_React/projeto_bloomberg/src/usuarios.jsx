@@ -7,7 +7,6 @@ export default class Usuarios extends Component{
         super(props)
         this.state = {lista: [{nome: 'teste', senha: 'teste', acoes: [{ticker: 'teste', preco: '1', qtd: '1'}]}], usuario: {nome: '', senha: '', acoes: [{ticker: '', preco: '', qtd: ''}]}}
         this.handleChange= this.handleChange.bind(this)
-        this.cadastro = this.cadastro.bind(this)
         axios.get('http://localhost:3000/users').then(resp=> {
             if(Math.floor(resp.status/100)===2){
                 this.setState({lista:resp.data})
@@ -26,7 +25,7 @@ export default class Usuarios extends Component{
             var liAcoes = usuario.acoes.map(acao => {
                 return (
                     <li 
-                    key={acao.ticker}>{acao.ticker}
+                    key={acao.ticker}>Ticker: {acao.ticker} -- Preço Médio: {acao.preco} -- Quantidade de ações: {acao.qtd}
                     </li> 
                 )
             })
@@ -39,42 +38,9 @@ export default class Usuarios extends Component{
         return (
             <div>
                 <ul> {liUsuarios} </ul>
-                <ul>
-                    <li>
-                        <label>Nome</label>
-                        <input name="nome"
-                        value = {this.state.usuario.nome}
-                        onChange={this.handleChange}/>
-                        <label>Senha</label>
-                        <input name="senha"
-                        value = {this.state.usuario.senha}
-                        onChange={this.handleChange}/>
-
-                    </li>
-                    <li>
-                        <button onClick={this.cadastro}>Registrar</button>
-                    </li>
-                </ul>
+                <a href='http://localhost:3001/'> Logout</a>
             </div>
         )
-    }
-
-
-    cadastro(){
-        axios.post('http://localhost:3000/users', this.state.usuario).then(resp=>{
-            if(Math.floor(resp.status/100)===2){
-                this.setState((state) => {
-                    return {
-                        lista: [...state.lista, state.usuario],
-                        usuario: {username: ''},
-                        redirectToRefferer: true
-                    }
-                 })
-                return;
-        }
-        console.log(resp)
-    })
-    .catch(erro => console.log(erro))
     }
 
 
