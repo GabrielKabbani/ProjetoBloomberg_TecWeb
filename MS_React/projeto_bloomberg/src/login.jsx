@@ -7,9 +7,11 @@ import Routes from './routes'
 export default class Login extends Component{
     constructor(props){
         super(props)
+        localStorage.removeItem('usuario')
         this.state = {usuario: {nome: '', senha: ''}, redirectToReferrer: false}
         this.handleChange= this.handleChange.bind(this)
         this.login = this.login.bind(this)
+        
     
     }
 
@@ -21,10 +23,11 @@ export default class Login extends Component{
                 <Redirect to='/usuarios'/>
             )
         }
+        
 
         return (
             <div>
-                <header>Página de login</header>
+                <header><h1>Página de login</h1></header>
                 <ul>
  
                         <label>Nome: </label>
@@ -37,9 +40,11 @@ export default class Login extends Component{
                         onChange={this.handleChange}/>
 
                         <button onClick={this.login}> Login</button>
-                        <a href='http://localhost:3001/cadastro'> Ir pra página de cadastro</a>
+                        
+                        
  
                 </ul>
+                <a href='http://localhost:3001/cadastro'> Ir pra página de cadastro</a>
             </div>
         )
     }
@@ -73,5 +78,7 @@ export default class Login extends Component{
             return state
         }
         this.setState(handleState(this.state,event))
+        localStorage.setItem('usuario', this.state.usuario.nome)
+        console.log("LOCAL STORAGE NOME: ", localStorage.getItem('usuario'))
     }
 }

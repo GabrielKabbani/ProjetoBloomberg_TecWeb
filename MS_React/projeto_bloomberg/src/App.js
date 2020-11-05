@@ -6,7 +6,7 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <h1>Projeto Bloomberg</h1>
+        {/* <h1>Projeto Bloomberg</h1> */}
         <Routes />
       </header>
     </div>

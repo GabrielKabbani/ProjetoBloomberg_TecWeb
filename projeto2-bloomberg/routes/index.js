@@ -40,7 +40,7 @@ router.post('/users/', function (req,res,next){
   })
 })
 
-/* GET ONE user data for login check. */
+/* POST ONE user data for login check. */
 router.post('/user/', function (req,res,next){
   console.log("CHEGOU AQUI")
   console.log("REQUEST BODY:", req.body)

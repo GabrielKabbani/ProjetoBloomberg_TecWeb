@@ -24,7 +24,7 @@ export default class Cadastro extends Component{
 
         return (
             <div>
-                <header>Página de cadastro</header>
+                <header><h1>Página de cadastro</h1></header>
                 <ul>
  
                         <label>Nome: </label>
@@ -37,8 +37,10 @@ export default class Cadastro extends Component{
                         onChange={this.handleChange}/>
 
                         <button onClick={this.cadastro}>   Registrar</button>
+
  
                 </ul>
+                <a href='http://localhost:3001/'> Voltar</a>
             </div>
         )
     }
