@@ -9,8 +9,10 @@ export default class Usuarios extends Component{
         var user = localStorage.getItem('usuario')
         var link = ("http://localhost:3000/user/" + user)
         console.log("LINK: ",link)
-        this.state = {lista: [{nome: 'teste', senha: 'teste', acoes: [{ticker: 'teste', preco: '1', qtd: '1'}]}],usuario: {nome: user, senha: '', acoes: [{ticker: 'teste', preco: '1', qtd: '1'}]}}
+        this.state = {lista: [{nome: 'teste', senha: 'teste', acoes: [{ticker: 'teste', preco: '1', qtd: '1', lucro: '1'}]}],usuario: {nome: user, senha: '', acoes: [{ticker: 'teste', preco: '1', qtd: '1', lucro: '1'}]}, adiciona:false}
         this.handleChange= this.handleChange.bind(this)
+        this.handleSubmit= this.handleSubmit.bind(this)
+        this.add=this.add.bind(this);
         axios.get(link).then(resp=> {
             if(Math.floor(resp.status/100)===2){
                 this.state={lista: resp.data,redirectToReferrer: false}
@@ -28,19 +30,36 @@ export default class Usuarios extends Component{
 
 
     render(){
-
-        if (this.state.redirectToReferrer===true){
-            return(
-                <Redirect to='/'/>
-            )
-        }
+ 
+        
         var usuarios=this.state.lista
         console.log("state no render", this.state.lista)
+        if (this.state.adiciona === true){
+            return (
+                <div>
+                    <header><h1>Adicionar ação na carteira</h1></header>
+                    <label>Ticker: </label>
+                        <input name="ticker"/>
+                        <label>    Preço médio: </label>
+                        <input name="preco"/>
+                        <label>    Quantidade: </label>
+                        <input name="qtd"/>
+                        <button onClick={this.handleSubmit}>Inserir</button>
+                    <a href='http://localhost:3001/usuarios'> Voltar</a>
+                </div>
+                
+            )
+
+
+
+
+
+        }else{
         var liUsuario = usuarios.map(usuario => {
         var liAcoes = usuario.acoes.map(acao => {
             return (
                 <li 
-                key={acao.ticker}>Ticker: {acao.ticker} -- Preço Médio: {acao.preco} -- Quantidade de ações: {acao.qtd}
+                key={acao.ticker}>Ticker: {acao.ticker} -- Preço Médio: {acao.preco} -- Quantidade de ações: {acao.qtd} -- Lucro obtido: {acao.lucro}
                 </li> 
             )
         })
@@ -53,10 +72,29 @@ export default class Usuarios extends Component{
             <div>
                 <header><h1>Carteira de {this.state.lista[0].nome}:</h1></header> 
                 <ul> {liUsuario} </ul>
-    
+                <button onClick={this.add}>Adicionar ação</button>
                 <a href='http://localhost:3001/'> Logout</a>
             </div>
         )
+    }}
+    add(){
+        console.log("STATE NO ADD", this.state)
+        if (this.state.adiciona===false){
+            var handleState = (state) => {
+                state.adiciona = true
+                return state
+            }
+            this.setState(handleState(this.state))
+        }else{
+            var handleState = (state) => {
+                state.adiciona = false
+                return state
+            }
+            this.setState(handleState(this.state))
+
+        }
+
+        
     }
 
 
@@ -68,5 +106,18 @@ export default class Usuarios extends Component{
             return state
         }
         this.setState(handleState(this.state,event))
+    }
+    handleSubmit(event){
+        var handleState = (state, event) => {
+            console.log("PROPS NO HANDLESUBMIT", this.props)
+            var acao = {ticker: this.props.ticker, preco: this.props.preco, qtd: this.props.qtd}
+            state.lista[0].acoes.push(acao)
+            state.adiciona=false
+            return state
+        }
+        var link = 'http://localhost:3000/'+this.state.usuario.nome
+        axios.put(link, handleState(this.state,event))
+        this.setState(handleState(this.state,event))
+        console.log("STATE NO HANDLESUBMIT", this.state)
     }
 }
