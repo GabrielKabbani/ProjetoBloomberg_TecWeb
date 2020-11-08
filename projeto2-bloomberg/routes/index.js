@@ -41,8 +41,9 @@ router.get('/user/:nome', function(req, res) {
   var Users = db.Mongoose.model('usercollection', db.UserSchema, 'usercollection');
   Users.find({nome: req.params.nome}).lean().exec(
     function(e, docs){
-      
-      for (var i=0;i<=docs.length;i++){
+      console.log("DOCS.ACOES NO GET QUE DEU BUG: ", docs[0].acoes);
+      console.log("docs[0].acoes.length", docs[0].acoes.length)
+      for (var i=0;i<docs[0].acoes.length;i++){
         var tick = docs[0].acoes[i].ticker
         var price = docs[0].acoes[i].preco
         var quant = docs[0].acoes[i].qtd
@@ -52,7 +53,6 @@ router.get('/user/:nome', function(req, res) {
         console.log("DOCS.ACOES FINAL DENTRO DE CADA FOR: ", docs[0].acoes);
       }
       res.json(docs);
-      console.log("DOCS.ACOES NO GET: ", docs[0].acoes);
       res.end();
     }
   )
@@ -61,7 +61,7 @@ router.get('/user/:nome', function(req, res) {
 router.post('/users/', function (req,res,next){
   var db = require('../db');
   var User = db.Mongoose.model('usercollection', db.UserSchema, 'usercollection');
-  var newuser = new User({nome: req.body.nome, senha: req.body.senha});
+  var newuser = new User({nome: req.body.nome, senha: req.body.senha, acoes: req.body.acoes});
   newuser.save(function(err){
     if (err) {
       res.status(500).json({error: err.message});

@@ -44,14 +44,6 @@ export default class Usuarios extends Component{
                         <input name="preco"/>
                         <label>    Quantidade: </label>
                         <input name="qtd"/>
-                        <script>
-                            var ticker = (""+document.getElementsByName("ticker")[0].value);
-                            console.log("TICKER", ticker)
-                            var preco = (""+document.getElementsByName("preco")[0].value);
-                            console.log("PRECO", preco)
-                            var qtd = (""+document.getElementsByName("qtd")[0].value);
-                            console.log("QUANTIDADE", qtd)
-                        </script>
                         <button onClick={() => this.handleSubmit([(""+document.getElementsByName("ticker")[0].value),(""+document.getElementsByName("preco")[0].value),(""+document.getElementsByName("qtd")[0].value)])}>Inserir</button>
                     <a href='http://localhost:3001/usuarios'> Voltar</a>
                 </div>
@@ -129,8 +121,6 @@ export default class Usuarios extends Component{
             axios.put(link, state.lista)
             return state
         }
-        
-        
         this.setState(handleState(this.state,event))
         console.log("STATE NO HANDLESUBMIT", this.state)
     }
