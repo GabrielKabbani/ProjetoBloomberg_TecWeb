@@ -2,26 +2,25 @@ var express = require('express');
 var router = express.Router();
 const axios = require("axios");
 
-const calculaLucro = (ticker, preco_comprado, volume_comprado) =>{
-axios.get("https://www.alphavantage.co/query?function=TIME_SERIES_WEEKLY_ADJUSTED&symbol="+ticker+"&apikey=MNPK2NIL3UAS75LJ").
-then(response =>{
-    const data = response.data;
+async function calculaLucro(ticker, preco_comprado, volume_comprado){
+  let response = await axios.get("https://www.alphavantage.co/query?function=TIME_SERIES_WEEKLY_ADJUSTED&symbol="+ticker+"&apikey=MNPK2NIL3UAS75LJ")
+  const data = response.data;
   
-    var texto = JSON.stringify(data), i = 0, pos = -1;
-    do {
+  var texto = JSON.stringify(data), i = 0, pos = -1;
+  do {
         pos = texto.indexOf('close', pos + 1);
         i++;
     } while (pos !== -1 && i < 2)
     
-    var valor_atual = parseFloat(texto.substring(pos+8,pos+15));
+  var valor_atual = parseFloat(texto.substring(pos+8,pos+15));
 
-    var lucro = (valor_atual - preco_comprado) * volume_comprado;
-    console.log(lucro);
+  var lucro = (valor_atual - preco_comprado) * volume_comprado;
+  console.log(lucro);
     
-    return(lucro);
+  return(lucro);
 
-}).catch(err => console.log(err));
-}
+
+};
 
 /* GET users and stocks. */
 router.get('/users', function(req, res) {
@@ -36,27 +35,28 @@ router.get('/users', function(req, res) {
 });
 
 /* GET ONE users and stocks. */
-router.get('/user/:nome', function(req, res) {
+ router.get('/user/:nome', async function(req, res) {
   var db = require("../db");
   var Users = db.Mongoose.model('usercollection', db.UserSchema, 'usercollection');
-  Users.find({nome: req.params.nome}).lean().exec(
-    function(e, docs){
-      console.log("DOCS.ACOES NO GET QUE DEU BUG: ", docs[0].acoes);
-      console.log("docs[0].acoes.length", docs[0].acoes.length)
-      for (var i=0;i<docs[0].acoes.length;i++){
-        var tick = docs[0].acoes[i].ticker
-        var price = docs[0].acoes[i].preco
-        var quant = docs[0].acoes[i].qtd
-        var profit = calculaLucro(""+tick,price,quant)
-        console.log("PROFIT",profit)
-        docs[0].acoes[i]={ticker:tick, preco:price, qtd:quant, lucro: profit}
-        console.log("DOCS.ACOES FINAL DENTRO DE CADA FOR: ", docs[0].acoes);
-      }
-      res.json(docs);
-      res.end();
+  let currentUser = await Users.findOne({nome: req.params.nome})
+   
+    let {acoes,nome,senha} = currentUser
+    console.log(acoes)
+  
+    for (var i=0;i<acoes.length;i++){
+      var tick = acoes[i].ticker
+      var price = acoes[i].preco
+      var quant = acoes[i].qtd
+      console.log(tick,price,quant)
+      var profit = await calculaLucro(""+tick,price,quant)
+      console.log("PROFIT",profit)
+      acoes[i]={ticker:tick, preco:price, qtd:quant, lucro: profit}
+      console.log("DOCS.ACOES FINAL DENTRO DE CADA FOR: ", acoes);
     }
-  )
-});
+    res.json([{acoes,nome,senha}]);
+
+    });
+  
 /* POST ONE user. */
 router.post('/users/', function (req,res,next){
   var db = require('../db');

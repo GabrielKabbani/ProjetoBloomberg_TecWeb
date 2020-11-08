@@ -14,6 +14,7 @@ export default class Usuarios extends Component{
         this.handleSubmit= this.handleSubmit.bind(this)
         this.add=this.add.bind(this);
         axios.get(link).then(resp=> {
+            console.log(resp)
             if(Math.floor(resp.status/100)===2){
                 this.state={lista: resp.data,redirectToReferrer: false}
                 this.setState(this.state)
