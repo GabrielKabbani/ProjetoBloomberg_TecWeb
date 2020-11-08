@@ -18,7 +18,7 @@ then(response =>{
     var lucro = (valor_atual - preco_comprado) * volume_comprado;
     console.log(lucro);
     
-    return(response);
+    return(lucro);
 
 }).catch(err => console.log(err));
 }
@@ -107,7 +107,9 @@ router.post('/user/', function (req,res,next){
 router.put('/users/:nome', function (req,res,next){
   var db = require('../db');
   var User = db.Mongoose.model('usercollection', db.UserSchema, 'usercollection');
-  User.findOneAndUpdate({nome: req.params.nome}, req.body, {upsert: true}, function(err,doc){
+  User.update({nome: req.params.nome}, req.body[0], {upsert: true}, function(err,doc){
+    console.log("REQPARAMSNOME: ", req.params.nome)
+    console.log("REQBODY NO PUT: ", req.body[0])
     if (err) {
       res.status(500).json({error:err.message});
       res.end();

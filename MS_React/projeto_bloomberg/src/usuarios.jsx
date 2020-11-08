@@ -38,13 +38,21 @@ export default class Usuarios extends Component{
             return (
                 <div>
                     <header><h1>Adicionar ação na carteira</h1></header>
-                    <label>Ticker: </label>
+                        <label>Ticker: </label>
                         <input name="ticker"/>
                         <label>    Preço médio: </label>
                         <input name="preco"/>
                         <label>    Quantidade: </label>
                         <input name="qtd"/>
-                        <button onClick={this.handleSubmit}>Inserir</button>
+                        <script>
+                            var ticker = (""+document.getElementsByName("ticker")[0].value);
+                            console.log("TICKER", ticker)
+                            var preco = (""+document.getElementsByName("preco")[0].value);
+                            console.log("PRECO", preco)
+                            var qtd = (""+document.getElementsByName("qtd")[0].value);
+                            console.log("QUANTIDADE", qtd)
+                        </script>
+                        <button onClick={() => this.handleSubmit([(""+document.getElementsByName("ticker")[0].value),(""+document.getElementsByName("preco")[0].value),(""+document.getElementsByName("qtd")[0].value)])}>Inserir</button>
                     <a href='http://localhost:3001/usuarios'> Voltar</a>
                 </div>
                 
@@ -108,15 +116,21 @@ export default class Usuarios extends Component{
         this.setState(handleState(this.state,event))
     }
     handleSubmit(event){
-        var handleState = (state, event) => {
-            console.log("PROPS NO HANDLESUBMIT", this.props)
-            var acao = {ticker: this.props.ticker, preco: this.props.preco, qtd: this.props.qtd}
+        var handleState = (state, array) => {
+            console.log("PROPS NO HANDLESUBMIT", array)
+            var tick = array[0]
+            var price = array[1]
+            var vol = array[2]
+            var acao = {ticker: tick, preco: price, qtd: vol}
             state.lista[0].acoes.push(acao)
             state.adiciona=false
+            var link = 'http://localhost:3000/users/'+this.state.usuario.nome
+            console.log("LINK PUT", link)
+            axios.put(link, state.lista)
             return state
         }
-        var link = 'http://localhost:3000/'+this.state.usuario.nome
-        axios.put(link, handleState(this.state,event))
+        
+        
         this.setState(handleState(this.state,event))
         console.log("STATE NO HANDLESUBMIT", this.state)
     }
