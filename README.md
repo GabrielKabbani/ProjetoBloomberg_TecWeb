@@ -2,4 +2,9 @@
 
 Projeto baseado em Node e React, ele calcula a partir da conexão com a API Alpha Vantage o lucro que o usuário tem com relação a compra de uma ação específica.
 
-Importante mencionar que o trabalho foi feito de maneira igual, a diferença de commits deve-se ao fato de o Luís Filipe ter ficado responsável pela API externa enquanto o Gabriel Maurício com a API interna, assim, grande parte dos commits foram feitos em conjunto - call - juntando o trabalho de ambos.
+Importante mencionar que o trabalho foi feito de maneira igual, a diferença de commits deve-se ao fato de o trabalho ter sido feito de maneira conjunta, em call, em que o Gabriel Maurício espelhou a tela.
+
+
+Link das demonstrações:
+1. https://youtu.be/NpXt4RnBv_4
+2. https://youtu.be/NwnthD2vjMk
