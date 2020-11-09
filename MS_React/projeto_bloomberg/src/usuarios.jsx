@@ -60,7 +60,7 @@ export default class Usuarios extends Component{
         var liAcoes = usuario.acoes.map(acao => {
             return (
                 <li 
-                key={acao.ticker}>Ticker: {acao.ticker} -- Preço Médio: {acao.preco} -- Quantidade de ações: {acao.qtd} -- Lucro obtido: {acao.lucro}
+                key={acao.ticker}>Ticker: {acao.ticker} -- Preço Médio: {acao.preco} -- Quantidade de ações: {acao.qtd} -- Lucro obtido: ${acao.lucro}
                 </li> 
             )
         })

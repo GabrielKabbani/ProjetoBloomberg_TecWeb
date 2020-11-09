@@ -15,7 +15,7 @@ async function calculaLucro(ticker, preco_comprado, volume_comprado){
   var valor_atual = parseFloat(texto.substring(pos+8,pos+15));
 
   var lucro = (valor_atual - preco_comprado) * volume_comprado;
-  console.log(lucro);
+  console.log("LUCRO: ",lucro);
     
   return(lucro);
 
@@ -41,9 +41,11 @@ router.get('/users', function(req, res) {
   let currentUser = await Users.findOne({nome: req.params.nome})
    
     let {acoes,nome,senha} = currentUser
-    console.log(acoes)
+    console.log("ACOES: ",acoes)
+    var size = acoes.length
   
-    for (var i=0;i<acoes.length;i++){
+    for (var i=0;i<size;i+=1){
+      console.log("i", i)
       var tick = acoes[i].ticker
       var price = acoes[i].preco
       var quant = acoes[i].qtd
